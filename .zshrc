@@ -14,30 +14,25 @@ PATH="/Library/Frameworks/Python.framework/Versions/3.5/bin:${PATH}"
 export PATH
 export PATH=$PATH:/Users/bolt/anaconda3/bin
 
-alias term="open /Applications/term/cool-retro-term.app"
-alias gcc="/usr/bin/gcc "$@""
-
+# Macros
 alias ds="sudo find ./ -name ".DS_Store" -depth -exec rm {} \;"
-alias nano='/usr/local/Cellar/nano/3.2/bin/nano --smooth --tabstospaces --linenumbers'
 alias code="/Applications/Visual\ Studio\ Code.app/Contents/MacOS/Electron $1"
 alias psql="/Library/PostgreSQL/12/scripts/runpsql.sh $@"
+alias anton="ssh anton@$SERVER -i ~/.ssh/id_anton_rsa -p 443"
+alias term="open /Applications/term/cool-retro-term.app"
+alias touchbar='pkill "Touch Bar agent";killall "ControlStrip";'
+alias gcc="/usr/bin/gcc "$@""
 
-# MacPorts Installer addition on 2018-07-19_at_10:47:37: adding an appropriate PATH variable for use with MacPorts.
+# Enable MacPorts
 export PATH="/opt/local/bin:/opt/local/sbin:$PATH"
-# Finished adapting your PATH environment variable for use with MacPorts.
 
-# FOR GO
+# Vars
 export GOPATH=$HOME/go
 export GO111MODULE=on
-# export GO111MODULE=auto
+
 export EDITOR="vim"
 export SERVER="192.168.1.200"
-export HOMENETWORK="72.80.151.67"
-alias antonl="ssh anton@$SERVER"
-alias anton="ssh anton@$HOMENETWORK"
 alias gf="gofmt -s -w ."
 
-alias touchbar='pkill "Touch Bar agent";killall "ControlStrip";'
-alias nc="/usr/bin/nc $@"
-
 export TERM=screen-256color
+
