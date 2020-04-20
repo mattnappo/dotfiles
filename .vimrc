@@ -4,17 +4,20 @@ syntax on
 set tabstop=4
 set backspace=indent,eol,start
 set autoindent
+set formatoptions+=r
 set number
 set hlsearch
 set ruler
 set encoding=utf-8
 
 " Switch to right pane
-map <C-t><up> :tr<cr>
+map <C-t><up> :tu<cr>
 " Switch to left pane
-map <C-t><down> :tl<cr>
+map <C-t><down> :td<cr>
 " Bind ctrl-n to toggle NERDTree
 map <C-n> :NERDTreeToggle<cr>
+" Fzf search for file
+map <C-p> :FzfFiles<CR>
 
 call plug#begin('~/.vim/plugged')
 Plug 'https://github.com/arzg/vim-colors-xcode'
@@ -38,21 +41,16 @@ let g:go_fmt_autosave = 1
 let g:fzf_command_prefix = 'Fzf'
 let g:fzf_layout=  { 'down': '~20%' }
 
-map <C-p> :FzfFiles<CR>
-
-" configure nord theme
+" Configure nord & airline
 let g:nord_bold = 1
 let g:airline_powerline_fonts = 1
 
-" disable Airline (temporarily)
-"let g:airline_disable_statusline = 1
-
-" enable true 256-bit color
+" Enable true 256-bit color
 set termguicolors
 let &t_8f = "\<Esc>[38;2;%lu;%lu;%lum"
 let &t_8b = "\<Esc>[48;2;%lu;%lu;%lum"
 set t_Co=256
 
-"colorscheme xcodedark
+" colorscheme xcodedark
 colorscheme nord
 
