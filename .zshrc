@@ -34,6 +34,4 @@ export EDITOR="vim"
 export SERVER="192.168.1.200"
 alias gf="gofmt -s -w ."
 
-export TERM=screen-256color
-
 [ -f "${GHCUP_INSTALL_BASE_PREFIX:=$HOME}/.ghcup/env" ] && source "${GHCUP_INSTALL_BASE_PREFIX:=$HOME}/.ghcup/env"
