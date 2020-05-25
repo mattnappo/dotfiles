@@ -22,6 +22,7 @@ alias anton="ssh anton@$SERVER -i ~/.ssh/id_anton_rsa -p 443"
 alias term="open /Applications/term/cool-retro-term.app"
 alias touchbar='pkill "Touch Bar agent";killall "ControlStrip";'
 alias gcc="/usr/bin/gcc "$@""
+alias aws="ssh ubuntu@ec2-3-16-169-116.us-east-2.compute.amazonaws.com -i ~/.ssh/aws_yb.pem"
 
 # Enable MacPorts
 export PATH="/opt/local/bin:/opt/local/sbin:$PATH"
@@ -30,8 +31,12 @@ export PATH="/opt/local/bin:/opt/local/sbin:$PATH"
 export GOPATH=$HOME/go
 export GO111MODULE=on
 
-export EDITOR="vim"
+export VISUAL=vim;
+export EDITOR=vim;
 export SERVER="192.168.1.200"
 alias gf="gofmt -s -w ."
+
+# Vim mode
+# set -o vi
 
 [ -f "${GHCUP_INSTALL_BASE_PREFIX:=$HOME}/.ghcup/env" ] && source "${GHCUP_INSTALL_BASE_PREFIX:=$HOME}/.ghcup/env"

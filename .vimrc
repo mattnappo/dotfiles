@@ -2,6 +2,7 @@
 
 syntax on
 set tabstop=4
+set expandtab
 set shiftwidth=4
 set backspace=indent,eol,start
 set noautoindent
@@ -10,6 +11,7 @@ set number
 set hlsearch
 set ruler
 set encoding=utf-8
+set virtualedit=block
 
 " Switch to right pane
 map <C-t><up> :tu<cr>
@@ -19,7 +21,9 @@ map <C-n> :NERDTreeToggle<cr>
 " Fzf search for file
 map <C-p> :FzfFiles<CR>
 
-map <C-t> :tabnew<CR>
+map <C-t> :tabnew<cr>
+
+map <C-s> :!sh -xc './compile_text.sh'
 
 " Better pane toggling
 nnoremap <C-H> <C-W><C-H>
