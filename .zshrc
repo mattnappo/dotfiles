@@ -26,7 +26,8 @@ alias aws="ssh ubuntu@ec2-3-16-169-116.us-east-2.compute.amazonaws.com -i ~/.ssh
 
 # Enable MacPorts
 export PATH="/opt/local/bin:/opt/local/sbin:$PATH"
-
+export PATH=$PATH:/usr/local/go/bin
+    
 # Vars
 export GOPATH=$HOME/go
 export GO111MODULE=on
