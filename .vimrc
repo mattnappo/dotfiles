@@ -39,15 +39,17 @@ set splitright
 set splitbelow
 
 call plug#begin('~/.vim/plugged')
-Plug 'https://github.com/arzg/vim-colors-xcode'
+Plug 'arzg/vim-colors-xcode'
 Plug 'arcticicestudio/nord-vim'
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
 Plug 'joshdick/onedark.vim'
+Plug 'ErichDonGubler/vim-sublime-monokai'
 Plug 'rakr/vim-one'
 
 " Plug 'itchyny/lightline.vim'
 Plug 'pangloss/vim-javascript'
+Plug 'hashrocket/vim-macdown'
 Plug 'rust-lang/rust.vim'
 Plug 'preservim/nerdtree'
 Plug 'fatih/vim-go', { 'do': ':GoUpdateBinaries' }
@@ -61,6 +63,9 @@ call plug#end()
 " Autosave for go and rust
 let g:rustfmt_autosave = 1
 let g:go_fmt_autosave = 1
+
+" execute macdown render on save
+autocmd BufWritePost *.md exec :MacDownPreview
 
 " fzf config
 let g:fzf_command_prefix = 'Fzf'
@@ -76,6 +81,9 @@ let g:airline_theme='bubblegum'
 " let g:lightline = {
 "       \ 'colorscheme': 'onedark',
 "       \ }
+
+" configure one theme italics
+let g:one_allow_italics = 1
 
 " Configure coc
 let g:coc_disable_startup_warning = 1
@@ -113,5 +121,7 @@ let $NVIM_TUI_ENABLE_TRUE_COLOR=1
 let g:rehash256 = 1
 
 " colorscheme onedark
+" colorscheme onedark " main theme
 
+" set background=light
 colorscheme one
