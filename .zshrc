@@ -1,4 +1,4 @@
-export ZSH="/Users/bolt/.oh-my-zsh"
+export ZSH="$HOME/.oh-my-zsh"
 # ZSH_THEME="robbyrussell"
 #ZSH_THEME="norm"
 # ZSH_THEME="cloud"
@@ -30,7 +30,8 @@ export PATH="/opt/local/bin:/opt/local/sbin:$PATH"
 # Vars
 export GOPATH=$HOME/go
 export GO111MODULE=on
-
+export PATH=$PATH:/usr/local/go/bin
+export PATH=$PATH:$HOME/.cargo/bin
 export VISUAL=vim;
 export EDITOR=vim;
 export SERVER="192.168.1.200"

@@ -16,8 +16,7 @@ set virtualedit=block
 
 " Switch to right pane
 map <C-t><up> :tu<cr>
-" Switch to left pane
-map <C-t><down> :td<cr> " Bind ctrl-n to toggle NERDTree
+" Switch to left pane map <C-t><down> :td<cr> " Bind ctrl-n to toggle NERDTree
 map <C-n> :NERDTreeToggle<cr>
 " Fzf search for file
 map <C-p> :FzfFiles<CR>
@@ -38,12 +37,13 @@ set splitbelow
 call plug#begin('~/.vim/plugged')
 Plug 'arzg/vim-colors-xcode'
 Plug 'arcticicestudio/nord-vim'
-Plug 'vim-airline/vim-airline'
+"Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
 Plug 'joshdick/onedark.vim'
 Plug 'ErichDonGubler/vim-sublime-monokai'
 Plug 'rakr/vim-one'
 
+Plug 'itchyny/lightline.vim'
 Plug 'pangloss/vim-javascript'
 Plug 'hashrocket/vim-macdown'
 Plug 'rust-lang/rust.vim'
@@ -67,14 +67,21 @@ let g:fzf_command_prefix = 'Fzf'
 let g:fzf_layout=  { 'down': '~20%' }
 
 " Configure nord & airline
-let g:nord_bold = 1
-let g:airline_powerline_fonts = 1
-let g:airline_theme='bubblegum'
+" let g:airline_powerline_fonts = 1
+" let g:airline_theme='bubblegum'
+
+" Configure status bar
+set laststatus=2
+set noshowmode
+let g:lightline = {
+      \ 'colorscheme': 'onedark',
+      \ }
 
 " configure one theme italics
 let g:one_allow_italics = 1
 
 " Configure coc
+let g:coc_disable_startup_warning = 1
 function! s:check_back_space() abort
   let col = col('.') - 1
   return !col || getline('.')[col - 1]  =~ '\s'
