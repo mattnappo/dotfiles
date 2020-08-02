@@ -1,8 +1,6 @@
 " curl -fLo ~/.vim/autoload/plug.vim --create-dir https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
 
-syntax on
-set tabstop=4
-set expandtab
+syntax on set tabstop=4 set expandtab
 set shiftwidth=4
 set backspace=indent,eol,start
 set noautoindent
@@ -14,16 +12,22 @@ set ruler
 set encoding=utf-8
 set virtualedit=block
 
-" Switch to right pane
-map <C-t><up> :tu<cr>
 " Switch to left pane map <C-t><down> :td<cr> " Bind ctrl-n to toggle NERDTree
 map <C-n> :NERDTreeToggle<cr>
 " Fzf search for file
 map <C-p> :FzfFiles<CR>
 
-map <C-t> :tabnew<cr>
-
 map <C-s> :!sh -xc './compile_text.sh'
+
+map <C-h> hzz
+map <C-j> jzz
+map <C-k> kzz
+map <C-l> lzz
+
+map j gj
+map k gk
+
+" map <C-c> :!sh -xc '/home/matt/git/md/Notes/compile_tex.sh'
 
 " Better pane toggling
 nnoremap <C-H> <C-W><C-H>
@@ -37,18 +41,21 @@ set splitbelow
 call plug#begin('~/.vim/plugged')
 Plug 'https://github.com/arzg/vim-colors-xcode'
 Plug 'arcticicestudio/nord-vim'
-"Plug 'vim-airline/vim-airline'
+Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
 Plug 'joshdick/onedark.vim'
+Plug 'rakr/vim-one'
 
-Plug 'itchyny/lightline.vim'
+" Plug 'itchyny/lightline.vim'
 Plug 'pangloss/vim-javascript'
 Plug 'rust-lang/rust.vim'
 Plug 'preservim/nerdtree'
 Plug 'fatih/vim-go', { 'do': ':GoUpdateBinaries' }
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
+Plug 'jiangmiao/auto-pairs'
 Plug 'junegunn/fzf' 
 Plug 'junegunn/fzf.vim'
+Plug 'ron-rs/ron.vim'
 call plug#end()
 
 " Autosave for go and rust
@@ -60,15 +67,15 @@ let g:fzf_command_prefix = 'Fzf'
 let g:fzf_layout=  { 'down': '~20%' }
 
 " Configure nord & airline
-" let g:airline_powerline_fonts = 1
-" let g:airline_theme='bubblegum'
+let g:airline_powerline_fonts = 1
+let g:airline_theme='bubblegum'
 
 " Configure status bar
-set laststatus=2
-set noshowmode
-let g:lightline = {
-      \ 'colorscheme': 'onedark',
-      \ }
+"set laststatus=2
+" set noshowmode
+" let g:lightline = {
+"       \ 'colorscheme': 'onedark',
+"       \ }
 
 " Configure coc
 let g:coc_disable_startup_warning = 1
@@ -105,5 +112,6 @@ let $NVIM_TUI_ENABLE_TRUE_COLOR=1
 
 let g:rehash256 = 1
 
-colorscheme onedark 
+" colorscheme onedark
 
+colorscheme one
