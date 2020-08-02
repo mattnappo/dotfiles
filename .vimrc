@@ -9,6 +9,7 @@ set noautoindent
 set formatoptions+=r
 set number
 set hlsearch
+set incsearch
 set ruler
 set encoding=utf-8
 set virtualedit=block
@@ -35,17 +36,21 @@ set splitright
 set splitbelow
 
 call plug#begin('~/.vim/plugged')
-Plug 'https://github.com/arzg/vim-colors-xcode'
+Plug 'arzg/vim-colors-xcode'
 Plug 'arcticicestudio/nord-vim'
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
 Plug 'joshdick/onedark.vim'
+Plug 'ErichDonGubler/vim-sublime-monokai'
+Plug 'rakr/vim-one'
 
 Plug 'pangloss/vim-javascript'
+Plug 'hashrocket/vim-macdown'
 Plug 'rust-lang/rust.vim'
 Plug 'preservim/nerdtree'
 Plug 'fatih/vim-go', { 'do': ':GoUpdateBinaries' }
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
+Plug 'jiangmiao/auto-pairs'
 Plug 'junegunn/fzf' 
 Plug 'junegunn/fzf.vim'
 call plug#end()
@@ -53,6 +58,9 @@ call plug#end()
 " Autosave for go and rust
 let g:rustfmt_autosave = 1
 let g:go_fmt_autosave = 1
+
+" execute macdown render on save
+autocmd BufWritePost *.md exec :MacDownPreview
 
 " fzf config
 let g:fzf_command_prefix = 'Fzf'
@@ -62,6 +70,9 @@ let g:fzf_layout=  { 'down': '~20%' }
 let g:nord_bold = 1
 let g:airline_powerline_fonts = 1
 let g:airline_theme='bubblegum'
+
+" configure one theme italics
+let g:one_allow_italics = 1
 
 " Configure coc
 function! s:check_back_space() abort
@@ -97,5 +108,7 @@ let $NVIM_TUI_ENABLE_TRUE_COLOR=1
 
 let g:rehash256 = 1
 
-colorscheme onedark 
+" colorscheme onedark " main theme
 
+" set background=light
+colorscheme one
