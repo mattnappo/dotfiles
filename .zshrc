@@ -33,8 +33,9 @@ export PATH="/opt/local/bin:/opt/local/sbin:$PATH"
 # Vars
 export GOPATH=$HOME/go
 export GO111MODULE=on
-export VISUAL=emacs;
-export EDITOR=emacs;
+export VISUAL="emacs -nw";
+export EDITOR="emacs -nw";
+export BROWSER="firefox";
 
 # Path adjustment
 export PATH=$PATH:/usr/local/go/bin
