@@ -1,5 +1,7 @@
 #!/bin/bash
 
+# TODO: install alacritty with cargo install or git clone & cargo buils
+
 # Check to see script is running in $HOME
 while true; do
     read -p "Are you in $HOME/ ? " yn
@@ -27,8 +29,10 @@ function install_apps {
     echo '-- APP INSTALLER --'
     echo 'Installing essential applications and command line tools'
     sudo snap install discord spotify
-    sudo snap install code alacritty skype --classic
+    sudo snap install code skype --classic
     sudo apt-get install git curl wget vim zsh tmux htop
+
+    sudo apt-get install zathura ranger
 }
 
 function install_fonts {

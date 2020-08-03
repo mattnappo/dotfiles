@@ -26,8 +26,6 @@ alias aws="ssh ubuntu@3.13.204.246 -i ~/.ssh/aws_yb.pem"
 alias demo="ssh ubuntu@ec2-13-58-186-37.us-east-2.compute.amazonaws.com -i ./.ssh/aws_yb.pem"
 alias open="xdg-open "$@""
 alias emacs="emacs -nw"
-alias gf="gofmt -s -w ."
-
 # Enable MacPorts
 export PATH="/opt/local/bin:/opt/local/sbin:$PATH"
 
@@ -39,6 +37,7 @@ export PATH=$PATH:$HOME/.cargo/bin
 export PATH=$PATH:/snap/bin
 export VISUAL=vim;
 export EDITOR=vim;
+alias gf="gofmt -s -w ."
 
 # Vim mode
 # set -o vi
