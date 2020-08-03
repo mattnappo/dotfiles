@@ -1,0 +1,8 @@
+#+TITLE: TODO
+* Get a clean font
+* Get clean background images
+* Polybar (look at "My AwesomeWM Configuration" video)
+* Transparency with compton
+* Can awesome wm drag windows around with the mouse?
+* Alacritty colorscheme picker
+** New vim theme?
