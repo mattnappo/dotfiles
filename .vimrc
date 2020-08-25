@@ -1,6 +1,8 @@
 " curl -fLo ~/.vim/autoload/plug.vim --create-dir https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
 
-syntax on set tabstop=4 set expandtab
+syntax on
+set tabstop=4
+set expandtab
 set shiftwidth=4
 set backspace=indent,eol,start
 set noautoindent
@@ -11,9 +13,12 @@ set incsearch
 set ruler
 set encoding=utf-8
 set virtualedit=block
+set relativenumber
 
 " Switch to left pane map <C-t><down> :td<cr> " Bind ctrl-n to toggle NERDTree
 map <C-n> :NERDTreeToggle<cr>
+" map <C-R> :NERDTreeRefresh<CR>
+
 " Fzf search for file
 map <C-p> :FzfFiles<CR>
 
@@ -39,51 +44,52 @@ set splitright
 set splitbelow
 
 call plug#begin('~/.vim/plugged')
+" Themes
 Plug 'arzg/vim-colors-xcode'
 Plug 'arcticicestudio/nord-vim'
-Plug 'vim-airline/vim-airline'
-Plug 'vim-airline/vim-airline-themes'
+Plug 'dracula/vim'
+Plug 'ntk148v/vim-horizon'
 Plug 'joshdick/onedark.vim'
-Plug 'ErichDonGubler/vim-sublime-monokai'
 Plug 'rakr/vim-one'
 
-" Plug 'itchyny/lightline.vim'
+" Status lines
+Plug 'itchyny/lightline.vim'
+" Plug 'vim-airline/vim-airline'
+" Plug 'vim-airline/vim-airline-themes'
+
+" Language support
 Plug 'pangloss/vim-javascript'
-Plug 'hashrocket/vim-macdown'
+Plug 'rhysd/vim-llvm'
 Plug 'rust-lang/rust.vim'
-Plug 'preservim/nerdtree'
 Plug 'fatih/vim-go', { 'do': ':GoUpdateBinaries' }
+Plug 'ron-rs/ron.vim'
+
+" Other
+Plug 'preservim/nerdtree'
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
 Plug 'jiangmiao/auto-pairs'
 Plug 'junegunn/fzf' 
 Plug 'junegunn/fzf.vim'
-Plug 'ron-rs/ron.vim'
+
 call plug#end()
 
 " Autosave for go and rust
 let g:rustfmt_autosave = 1
 let g:go_fmt_autosave = 1
 
-" execute macdown render on save
-autocmd BufWritePost *.md exec :MacDownPreview
-
 " fzf config
 let g:fzf_command_prefix = 'Fzf'
 let g:fzf_layout=  { 'down': '~20%' }
 
-" Configure nord & airline
-let g:airline_powerline_fonts = 1
-let g:airline_theme='bubblegum'
+" Configure airline
+" let g:airline_powerline_fonts = 1
+" let g:airline_theme='bubblegum'
 
 " Configure status bar
-"set laststatus=2
-" set noshowmode
-" let g:lightline = {
-"       \ 'colorscheme': 'onedark',
-"       \ }
-
-" configure one theme italics
-let g:one_allow_italics = 1
+set laststatus=2
+set noshowmode
+" let g:lightline = { 'colorscheme': 'seoul256' }
+let g:lightline = { 'colorscheme': 'wombat' }
 
 " Configure coc
 let g:coc_disable_startup_warning = 1
@@ -91,7 +97,6 @@ function! s:check_back_space() abort
   let col = col('.') - 1
   return !col || getline('.')[col - 1]  =~ '\s'
 endfunction
-
 inoremap <silent><expr> <Tab>
       \ pumvisible() ? "\<C-n>" :
       \ <SID>check_back_space() ? "\<Tab>" :
@@ -104,24 +109,15 @@ inoremap <expr> <cr> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
 autocmd StdinReadPre * let s:std_in=1
 autocmd VimEnter * if argc() == 0 && !exists('s:std_in') | NERDTree | endif
 
+" Fix colors
 set termguicolors
 let &t_8f = "\<Esc>[38;2;%lu;%lu;%lum"
 let &t_8b = "\<Esc>[48;2;%lu;%lu;%lum"
 set t_Co=256
-
-if (has("nvim"))
-	let $NVIM_TUI_ENABLE_TRUE_COLOR=1
-endif
-if (has("termguicolors"))
-	set termguicolors
-endif
-
-let $NVIM_TUI_ENABLE_TRUE_COLOR=1
-
 let g:rehash256 = 1
+set background=dark
 
+" Colorscheme
 " colorscheme onedark
-" colorscheme onedark " main theme
-
-" set background=light
-colorscheme one
+colorscheme dracula
+" colorscheme horizon
