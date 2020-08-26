@@ -15,6 +15,18 @@ window:
 
   title: alacritty
 
+font:
+  size: 11.0
+  normal:
+    family: Fira Code
+    style: Regular
+  bold:
+    family: Fira Code
+    style: Bold
+  italic:
+    family: Fira Code
+    style: Italic
+
 # Colors (Horizon Dark)
 colors:
   # Primary colors

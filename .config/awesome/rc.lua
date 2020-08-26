@@ -11,6 +11,13 @@ local wibox = require("wibox")
 
 require("collision")() -- load collision
 
+-- Volume control --
+local volume_control = require("volume-control")
+volumecfg = volume_control( {device = "pulse"} )
+
+-- Weather lib --
+local weather_widget = require("awesome-wm-widgets.weather-widget.weather")
+
 -- Theme handling library
 local beautiful = require("beautiful")
 -- Notification library
@@ -65,6 +72,7 @@ editor_cmd = terminal .. " -e " .. editor
 -- I suggest you to remap Mod4 to another key using xmodmap or other tools.
 -- However, you can use another modifier like Mod1, but it may interact with others.
 modkey = "Mod4"
+altkey = "Mod1"
 
 -- Table of layouts to cover with awful.layout.inc, order matters.
 awful.layout.layouts = {
@@ -128,7 +136,8 @@ mykeyboardlayout = awful.widget.keyboardlayout()
 
 -- {{{ Wibar
 -- Create a textclock widget
-mytextclock = wibox.widget.textclock()
+datetextclock = awful.widget.textclock(" %a, %b %d ")
+timetextclock = awful.widget.textclock(" %I:%M%P ")
 
 -- Create a wibox for each screen and add it
 local taglist_buttons = gears.table.join(
@@ -213,28 +222,54 @@ awful.screen.connect_for_each_screen(function(s)
     s.mytasklist = awful.widget.tasklist {
         screen  = s,
         filter  = awful.widget.tasklist.filter.currenttags,
-        buttons = tasklist_buttons
+        buttons = tasklist_buttons,
     }
 
     -- Create the wibox
     s.mywibox = awful.wibar({ position = "top", screen = s })
 
+
+    weather = weather_widget({
+        api_key     = "c4a898866ec0519bdcc3e652f1e424b0",
+        coordinates = {41.050444, -73.755296},
+        time_format_12h = true,
+        units = "imperial",
+        show_hourly_forecast = true,
+        show_daily_forecast = true,
+    })
+
     -- Add widgets to the wibox
     s.mywibox:setup {
         layout = wibox.layout.align.horizontal,
-        { -- Left widgets
+        -- Left widgets
+        {
             layout = wibox.layout.fixed.horizontal,
             mylauncher,
             s.mytaglist,
             s.mypromptbox,
         },
-        s.mytasklist, -- Middle widget
-        { -- Right widgets
+       
+        -- Middle widget
+        {
             layout = wibox.layout.fixed.horizontal,
-            mykeyboardlayout,
+            s.mytasklist
+        }, 
+       
+        -- Right widgets
+        {
+            layout = wibox.layout.fixed.horizontal,
+            spacing = 12,
+            spacing_widget = {
+                shape = gears.shape.powerline,
+                widget = wibox.widget.separator,
+            },
             wibox.widget.systray(),
-            mytextclock,
-            s.mylayoutbox,
+
+            datetextclock,
+            timetextclock,
+
+            weather,
+            volumecfg.widget,
         },
     }
 end)
@@ -250,6 +285,12 @@ root.buttons(gears.table.join(
 
 -- {{{ Key bindings
 globalkeys = gears.table.join(
+    ----- CUSTOM -----
+    awful.key({ modkey,           }, "f", function() awful.spawn.with_shell("firefox") end,
+              {description="launch firefox", group="custom"}),
+    awful.key({ modkey,           }, "d", function() awful.spawn.with_shell("discord") end,
+              {description="launch discord", group="custom"}),
+
     awful.key({ modkey,           }, "s",      hotkeys_popup.show_help,
               {description="show help", group="awesome"}),
     awful.key({ modkey,           }, "Left",   awful.tag.viewprev,
@@ -586,11 +627,18 @@ client.connect_signal("unfocus", function(c) c.border_color = beautiful.border_n
 -- }}}
 
 -- Personal config --
-beautiful.useless_gap = 10 -- Add gaps
+beautiful.useless_gap = 6 -- Add gaps
+
+-- Round the corners
+-- client.connect_signal("manage", function (c)
+--     c.shape = function(cr, w, h)
+--         gears.shape.rounded_rect(cr, w, h, 10)
+--     end
+-- end)
 
 -- Auto start programs
 awful.spawn.with_shell("compton --config ~/.config/compton/compton.conf")
 awful.spawn.with_shell("nitrogen --restore")
-awful.spawn.with_shell("discord")
+awful.spawn.with_shell("ckb-next-daemon")
 -- awful.spawn.with_shell("sh ~/.config/polybar/launch.sh")
 -- awful.spawn.with_shell("polybar example")
