@@ -14,6 +14,7 @@ set ruler
 set encoding=utf-8
 set virtualedit=block
 set relativenumber
+set ttimeoutlen=10 " Fix slow O
 
 " Switch to left pane map <C-t><down> :td<cr> " Bind ctrl-n to toggle NERDTree
 map <C-n> :NERDTreeToggle<cr>
@@ -51,6 +52,8 @@ Plug 'dracula/vim'
 Plug 'ntk148v/vim-horizon'
 Plug 'joshdick/onedark.vim'
 Plug 'rakr/vim-one'
+Plug 'arcticicestudio/nord-vim'
+Plug 'morhetz/gruvbox'
 
 " Status lines
 Plug 'itchyny/lightline.vim'
@@ -63,6 +66,8 @@ Plug 'rhysd/vim-llvm'
 Plug 'rust-lang/rust.vim'
 Plug 'fatih/vim-go', { 'do': ':GoUpdateBinaries' }
 Plug 'ron-rs/ron.vim'
+Plug 'tbastos/vim-lua'
+Plug 'elixir-editors/vim-elixir'
 
 " Other
 Plug 'preservim/nerdtree'
@@ -119,5 +124,6 @@ set background=dark
 
 " Colorscheme
 " colorscheme onedark
-colorscheme dracula
+" colorscheme dracula
 " colorscheme horizon
+colorscheme gruvbox

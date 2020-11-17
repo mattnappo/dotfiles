@@ -1,32 +1,3 @@
-env:
-  TERM: xterm-256color
-
-# background-opacity: 0.8
-
-# Window settings
-window:
-  dimensions:
-    columns: 94
-    lines: 32
-
-  position:
-    x: 2120
-    y: 200
-
-  title: alacritty
-
-font:
-  size: 11.0
-  normal:
-    family: Fira Code
-    style: Regular
-  bold:
-    family: Fira Code
-    style: Bold
-  italic:
-    family: Fira Code
-    style: Italic
-   
 # Colors (Gruvbox dark)
 colors:
   # Default colors

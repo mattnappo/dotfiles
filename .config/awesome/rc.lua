@@ -32,6 +32,9 @@ require("awful.hotkeys_popup.keys")
 local debian = require("debian.menu")
 local has_fdo, freedesktop = pcall(require, "freedesktop")
 
+local nice = require("nice")
+nice()
+
 -- {{{ Error handling
 -- Check if awesome encountered an error during startup and fell back to
 -- another config (This code will only ever execute for the fallback config)
@@ -76,9 +79,9 @@ altkey = "Mod1"
 
 -- Table of layouts to cover with awful.layout.inc, order matters.
 awful.layout.layouts = {
-    -- awful.layout.suit.floating,
     awful.layout.suit.tile,
-    -- awful.layout.suit.tile.left,
+    awful.layout.suit.floating,
+    awful.layout.suit.tile.left,
     -- awful.layout.suit.tile.bottom,
     -- awful.layout.suit.tile.top,
     -- awful.layout.suit.fair,
@@ -89,7 +92,7 @@ awful.layout.layouts = {
     -- awful.layout.suit.max.fullscreen,
     -- awful.layout.suit.magnifier,
     -- awful.layout.suit.corner.nw,
-    -- awful.layout.suit.corner.ne,
+    awful.layout.suit.corner.ne,
     -- awful.layout.suit.corner.sw,
     -- awful.layout.suit.corner.se,
 }
@@ -138,6 +141,7 @@ mykeyboardlayout = awful.widget.keyboardlayout()
 -- Create a textclock widget
 datetextclock = awful.widget.textclock(" %a, %b %d ")
 timetextclock = awful.widget.textclock(" %I:%M%P ")
+nothing = awful.widget.textclock("  ")
 
 -- Create a wibox for each screen and add it
 local taglist_buttons = gears.table.join(
@@ -191,6 +195,34 @@ local function set_wallpaper(s)
     end
 end
 
+local round_thresh = 9
+local round_amount = round_thresh --boot up awesome with rounded corners by default
+
+-- Round the corners
+local function toggle_round ()
+    gears.debug.dump(round_amount)
+    if round_amount == round_thresh then
+        round_amount = 0
+    end
+
+    if round_amount == 0 then
+        round_amount = round_thresh
+    end
+
+    client.connect_signal("manage", function (c)
+        c.shape = function(cr, w, h)
+            gears.shape.rounded_rect(cr, w, h, round_amount)
+        end
+    end)
+end
+
+-- Round nn startup
+client.connect_signal("manage", function (c)
+    c.shape = function(cr, w, h)
+        gears.shape.rounded_rect(cr, w, h, 9)
+    end
+end)
+
 -- Re-set wallpaper when a screen's geometry changes (e.g. different resolution)
 screen.connect_signal("property::geometry", set_wallpaper)
 
@@ -200,6 +232,7 @@ awful.screen.connect_for_each_screen(function(s)
 
     -- Each screen has its own tag table.
     awful.tag({ "1", "2", "3", "4", "5", "6", "7", "8", "9" }, s, awful.layout.layouts[1])
+    -- awful.tag({ "work", "zoom", "school", "college", "code", "game", "x", "x", "x" }, s, awful.layout.layouts[1])
 
     -- Create a promptbox for each screen
     s.mypromptbox = awful.widget.prompt()
@@ -227,7 +260,9 @@ awful.screen.connect_for_each_screen(function(s)
 
     -- Create the wibox
     s.mywibox = awful.wibar({ position = "top", screen = s })
-
+  
+    -- Make the wibox transparent
+    -- s.mywibox = awful.wibar({ position = "top", screen = s, bg = beautiful.bg_normal .. "55" })
 
     weather = weather_widget({
         api_key     = "c4a898866ec0519bdcc3e652f1e424b0",
@@ -265,11 +300,15 @@ awful.screen.connect_for_each_screen(function(s)
             },
             wibox.widget.systray(),
 
+            --nothing,
+
             datetextclock,
             timetextclock,
+            debugger,
 
             weather,
             volumecfg.widget,
+            s.mylayoutbox,
         },
     }
 end)
@@ -285,20 +324,41 @@ root.buttons(gears.table.join(
 
 -- {{{ Key bindings
 globalkeys = gears.table.join(
-    ----- CUSTOM -----
-    awful.key({ modkey,           }, "f", function() awful.spawn.with_shell("firefox") end,
+    ----- CUSTOM KEYS -----
+    awful.key({ modkey,           }, "f",       function() awful.spawn.with_shell("firefox") end,
               {description="launch firefox", group="custom"}),
-    awful.key({ modkey,           }, "d", function() awful.spawn.with_shell("discord") end,
+    awful.key({ modkey,           }, "d",       function() awful.spawn.with_shell("discord") end,
               {description="launch discord", group="custom"}),
+    awful.key({ modkey,           }, "c",       function() awful.spawn.with_shell("/home/matt/random/tools/cordless/cordless") end,
+              {description="launch cordless", group="custom"}),
+    awful.key({ modkey,           }, "e",       function() awful.spawn.with_shell("emacs") end,
+              {description="launch emacs", group="custom"}),
 
+    awful.key({ modkey,           }, "=",       function() awful.spawn.with_shell("amixer -D pulse sset Master 2%+") end,
+              {description="volume up 2%", group="custom"}),
+    awful.key({ modkey,           }, "-",       function() awful.spawn.with_shell("amixer -D pulse sset Master 2%-") end,
+              {description="volume down 2%", group="custom"}),
+
+    awful.key({ modkey, "Shift"   }, "t", function() awful.spawn.with_shell("evince /home/matt/files/textbooks/$(ls /home/matt/files/textbooks | dmenu)") end,
+              {description="Open textbooks", group="custom"}),
+
+    awful.key({ modkey,           }, "Escape",
+        function()
+            for screen = 1, screen.count() do
+                local tag = awful.tag.gettags(screen)[1]
+                if tag then
+                    awful.tag.viewonly(tag)
+                end
+            end
+        end, {description = "I'm supposed to be working!", group = "custom"}),
+
+    -- DEFAULTS -- 
     awful.key({ modkey,           }, "s",      hotkeys_popup.show_help,
               {description="show help", group="awesome"}),
     awful.key({ modkey,           }, "Left",   awful.tag.viewprev,
               {description = "view previous", group = "tag"}),
     awful.key({ modkey,           }, "Right",  awful.tag.viewnext,
               {description = "view next", group = "tag"}),
-    awful.key({ modkey,           }, "Escape", awful.tag.history.restore,
-              {description = "go back", group = "tag"}),
 
     awful.key({ modkey,           }, "j",
         function ()
@@ -373,7 +433,7 @@ globalkeys = gears.table.join(
               {description = "restore minimized", group = "client"}),
 
     -- Prompt
-    awful.key({ modkey },            "r",     function () awful.screen.focused().mypromptbox:run() end,
+    awful.key({ modkey },            "r",     function () awful.spawn.with_shell("rofi -show") end,
               {description = "run prompt", group = "launcher"}),
 
     awful.key({ modkey }, "x",
@@ -508,7 +568,8 @@ root.keys(globalkeys)
 awful.rules.rules = {
     -- All clients will match this rule.
     { rule = { },
-      properties = { border_width = beautiful.border_width,
+      --properties = { border_width = beautiful.border_width,
+      properties = { border_width = 0,
                      border_color = beautiful.border_normal,
                      focus = awful.client.focus.filter,
                      raise = true,
@@ -627,18 +688,20 @@ client.connect_signal("unfocus", function(c) c.border_color = beautiful.border_n
 -- }}}
 
 -- Personal config --
-beautiful.useless_gap = 6 -- Add gaps
+-- beautiful.useless_gap = 6 -- Add gaps
+beautiful.useless_gap = 10 -- Add gaps
 
--- Round the corners
--- client.connect_signal("manage", function (c)
---     c.shape = function(cr, w, h)
---         gears.shape.rounded_rect(cr, w, h, 10)
---     end
--- end)
+-- Extra config
+awful.spawn.with_shell("xrandr --output HDMI-0 --primary --output DP-0 --left-of HDMI-0")
 
 -- Auto start programs
-awful.spawn.with_shell("compton --config ~/.config/compton/compton.conf")
+awful.spawn.with_shell("compton --config ~/.config/compton/compton.main.conf")
+-- awful.spawn.with_shell("ckb-next")
+--awful.spawn.with_shell("openrazer-daemon")
+-- awful.spawn.with_shell("/usr/bin/polychromatic-tray-applet")
 awful.spawn.with_shell("nitrogen --restore")
-awful.spawn.with_shell("ckb-next-daemon")
+
+-- Fix mouse sense
+awful.spawn.with_shell("xinput --set-prop 13 'libinput Accel Speed' -0.7")
 -- awful.spawn.with_shell("sh ~/.config/polybar/launch.sh")
 -- awful.spawn.with_shell("polybar example")

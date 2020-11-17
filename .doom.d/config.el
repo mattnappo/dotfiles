@@ -33,8 +33,10 @@
 
 ;; This determines the style of line numbers in effect. If set to `nil', line
 ;; numbers are disabled. For relative line numbers, set this to `relative'.
-(setq display-line-numbers-type t)
+(setq display-line-numbers-type 'relative)
 
+;; Enable s/S behavior like in Vim
+(after! evil-snipe (evil-snipe-mode -1))
 
 ;; Here are some additional functions/macros that could help you configure Doom:
 ;;
@@ -102,3 +104,6 @@
                       ;(mu4e-sent-messages-behavior . 'delete)
                       )
                     nil)
+
+
+(load-file "~/.doom.d/packages/discord-emacs.el/discord-emacs.el")
