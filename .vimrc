@@ -54,6 +54,7 @@ Plug 'joshdick/onedark.vim'
 Plug 'rakr/vim-one'
 Plug 'arcticicestudio/nord-vim'
 Plug 'morhetz/gruvbox'
+Plug 'kaicataldo/material.vim', { 'branch': 'main' } 
 
 " Status lines
 Plug 'itchyny/lightline.vim'
@@ -68,6 +69,9 @@ Plug 'fatih/vim-go', { 'do': ':GoUpdateBinaries' }
 Plug 'ron-rs/ron.vim'
 Plug 'tbastos/vim-lua'
 Plug 'elixir-editors/vim-elixir'
+Plug 'justinmk/vim-syntax-extra'
+Plug 'vim-python/python-syntax'
+Plug 'bfrg/vim-cpp-modern'
 
 " Other
 Plug 'preservim/nerdtree'
@@ -122,8 +126,14 @@ set t_Co=256
 let g:rehash256 = 1
 set background=dark
 
+let g:material_terminal_italics = 1
+let g:material_theme_style = 'ocean'
+colorscheme material
+colorscheme gruvbox
+
 " Colorscheme
 " colorscheme onedark
 " colorscheme dracula
 " colorscheme horizon
-colorscheme gruvbox
+" colorscheme gruvbox
+

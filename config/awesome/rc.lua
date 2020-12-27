@@ -8,16 +8,6 @@ local awful = require("awful")
 require("awful.autofocus")
 -- Widget and layout library
 local wibox = require("wibox")
-
-require("collision")() -- load collision
-
--- Volume control --
-local volume_control = require("volume-control")
-volumecfg = volume_control( {device = "pulse"} )
-
--- Weather lib --
-local weather_widget = require("awesome-wm-widgets.weather-widget.weather")
-
 -- Theme handling library
 local beautiful = require("beautiful")
 -- Notification library
@@ -28,12 +18,13 @@ local hotkeys_popup = require("awful.hotkeys_popup")
 -- when client with a matching name is opened:
 require("awful.hotkeys_popup.keys")
 
--- Load Debian menu entries
-local debian = require("debian.menu")
-local has_fdo, freedesktop = pcall(require, "freedesktop")
+-- import custom libs --
+-- Volume control
+local volume_control = require("volume-control")
+volumecfg = volume_control( {device = "pulse"} )
 
-local nice = require("nice")
-nice()
+-- Weather lib --
+local weather_widget = require("awesome-wm-widgets.weather-widget.weather")
 
 -- {{{ Error handling
 -- Check if awesome encountered an error during startup and fell back to
@@ -63,10 +54,11 @@ end
 -- {{{ Variable definitions
 -- Themes define colours, icons, font and wallpapers.
 beautiful.init(gears.filesystem.get_themes_dir() .. "default/theme.lua")
+--beautiful.font = "SF Pro 12"
 
 -- This is used later as the default terminal and editor to run.
 terminal = "alacritty"
-editor = os.getenv("EDITOR") or "editor"
+editor = os.getenv("EDITOR") or "vim"
 editor_cmd = terminal .. " -e " .. editor
 
 -- Default modkey.
@@ -108,24 +100,10 @@ myawesomemenu = {
    { "quit", function() awesome.quit() end },
 }
 
-local menu_awesome = { "awesome", myawesomemenu, beautiful.awesome_icon }
-local menu_terminal = { "open terminal", terminal }
-
-if has_fdo then
-    mymainmenu = freedesktop.menu.build({
-        before = { menu_awesome },
-        after =  { menu_terminal }
-    })
-else
-    mymainmenu = awful.menu({
-        items = {
-                  menu_awesome,
-                  { "Debian", debian.menu.Debian_menu.Debian },
-                  menu_terminal,
-                }
-    })
-end
-
+mymainmenu = awful.menu({ items = { { "awesome", myawesomemenu, beautiful.awesome_icon },
+                                    { "open terminal", terminal }
+                                  }
+                        })
 
 mylauncher = awful.widget.launcher({ image = beautiful.awesome_icon,
                                      menu = mymainmenu })
@@ -139,9 +117,8 @@ mykeyboardlayout = awful.widget.keyboardlayout()
 
 -- {{{ Wibar
 -- Create a textclock widget
-datetextclock = awful.widget.textclock(" %a, %b %d ")
-timetextclock = awful.widget.textclock(" %I:%M%P ")
-nothing = awful.widget.textclock("  ")
+datetextclock = wibox.widget.textclock(" %a, %b %d ")
+timetextclock = wibox.widget.textclock(" %I:%M%P ")
 
 -- Create a wibox for each screen and add it
 local taglist_buttons = gears.table.join(
@@ -195,34 +172,6 @@ local function set_wallpaper(s)
     end
 end
 
-local round_thresh = 9
-local round_amount = round_thresh --boot up awesome with rounded corners by default
-
--- Round the corners
-local function toggle_round ()
-    gears.debug.dump(round_amount)
-    if round_amount == round_thresh then
-        round_amount = 0
-    end
-
-    if round_amount == 0 then
-        round_amount = round_thresh
-    end
-
-    client.connect_signal("manage", function (c)
-        c.shape = function(cr, w, h)
-            gears.shape.rounded_rect(cr, w, h, round_amount)
-        end
-    end)
-end
-
--- Round nn startup
-client.connect_signal("manage", function (c)
-    c.shape = function(cr, w, h)
-        gears.shape.rounded_rect(cr, w, h, 9)
-    end
-end)
-
 -- Re-set wallpaper when a screen's geometry changes (e.g. different resolution)
 screen.connect_signal("property::geometry", set_wallpaper)
 
@@ -232,7 +181,6 @@ awful.screen.connect_for_each_screen(function(s)
 
     -- Each screen has its own tag table.
     awful.tag({ "1", "2", "3", "4", "5", "6", "7", "8", "9" }, s, awful.layout.layouts[1])
-    -- awful.tag({ "work", "zoom", "school", "college", "code", "game", "x", "x", "x" }, s, awful.layout.layouts[1])
 
     -- Create a promptbox for each screen
     s.mypromptbox = awful.widget.prompt()
@@ -255,21 +203,21 @@ awful.screen.connect_for_each_screen(function(s)
     s.mytasklist = awful.widget.tasklist {
         screen  = s,
         filter  = awful.widget.tasklist.filter.currenttags,
-        buttons = tasklist_buttons,
+        buttons = tasklist_buttons
     }
 
     -- Create the wibox
     s.mywibox = awful.wibar({ position = "top", screen = s })
-  
-    -- Make the wibox transparent
-    -- s.mywibox = awful.wibar({ position = "top", screen = s, bg = beautiful.bg_normal .. "55" })
 
+    -- Create custom widgets
     weather = weather_widget({
         api_key     = "c4a898866ec0519bdcc3e652f1e424b0",
         coordinates = {41.050444, -73.755296},
         time_format_12h = true,
         units = "imperial",
         show_hourly_forecast = true,
+
+        -- Create custom widgets
         show_daily_forecast = true,
     })
 
@@ -300,13 +248,10 @@ awful.screen.connect_for_each_screen(function(s)
             },
             wibox.widget.systray(),
 
-            --nothing,
-
             datetextclock,
             timetextclock,
-            debugger,
 
-            weather,
+            -- weather,
             volumecfg.widget,
             s.mylayoutbox,
         },
@@ -322,7 +267,7 @@ root.buttons(gears.table.join(
 ))
 -- }}}
 
--- {{{ Key bindings
+-- KEYBINDS --
 globalkeys = gears.table.join(
     ----- CUSTOM KEYS -----
     awful.key({ modkey,           }, "f",       function() awful.spawn.with_shell("firefox") end,
@@ -341,6 +286,9 @@ globalkeys = gears.table.join(
 
     awful.key({ modkey, "Shift"   }, "t", function() awful.spawn.with_shell("evince /home/matt/files/textbooks/$(ls /home/matt/files/textbooks | dmenu)") end,
               {description="Open textbooks", group="custom"}),
+
+    awful.key({ modkey,           }, "w", function () awful.spawn.with_shell("firefox https://wolframalpha.com") end,
+              {description = "open wolframalpha", group = "custom"}),
 
     awful.key({ modkey,           }, "Escape",
         function()
@@ -372,8 +320,6 @@ globalkeys = gears.table.join(
         end,
         {description = "focus previous by index", group = "client"}
     ),
-    awful.key({ modkey,           }, "w", function () mymainmenu:show() end,
-              {description = "show main menu", group = "awesome"}),
 
     -- Layout manipulation
     awful.key({ modkey, "Shift"   }, "j", function () awful.client.swap.byidx(  1)    end,
@@ -568,8 +514,7 @@ root.keys(globalkeys)
 awful.rules.rules = {
     -- All clients will match this rule.
     { rule = { },
-      --properties = { border_width = beautiful.border_width,
-      properties = { border_width = 0,
+      properties = { border_width = beautiful.border_width,
                      border_color = beautiful.border_normal,
                      focus = awful.client.focus.filter,
                      raise = true,
@@ -612,9 +557,9 @@ awful.rules.rules = {
       }, properties = { floating = true }},
 
     -- Add titlebars to normal clients and dialogs
-    -- { rule_any = {type = { "normal", "dialog" }
-      -- }, properties = { titlebars_enabled = true }
-    -- },
+    { rule_any = {type = { "normal", "dialog" }
+      }, properties = { titlebars_enabled = false }
+    },
 
     -- Set Firefox to always map on the tag named "2" on screen 1.
     -- { rule = { class = "Firefox" },
@@ -684,24 +629,16 @@ end)
 
 client.connect_signal("focus", function(c) c.border_color = beautiful.border_focus end)
 client.connect_signal("unfocus", function(c) c.border_color = beautiful.border_normal end)
-
 -- }}}
 
--- Personal config --
--- beautiful.useless_gap = 6 -- Add gaps
+
+
+----- OTHER CONFIG -----
+
 beautiful.useless_gap = 10 -- Add gaps
 
--- Extra config
-awful.spawn.with_shell("xrandr --output HDMI-0 --primary --output DP-0 --left-of HDMI-0")
-
--- Auto start programs
-awful.spawn.with_shell("compton --config ~/.config/compton/compton.main.conf")
--- awful.spawn.with_shell("ckb-next")
---awful.spawn.with_shell("openrazer-daemon")
--- awful.spawn.with_shell("/usr/bin/polychromatic-tray-applet")
 awful.spawn.with_shell("nitrogen --restore")
 
--- Fix mouse sense
-awful.spawn.with_shell("xinput --set-prop 13 'libinput Accel Speed' -0.7")
--- awful.spawn.with_shell("sh ~/.config/polybar/launch.sh")
--- awful.spawn.with_shell("polybar example")
+-- awful.spawn.with_shell("ckb-next")
+
+

@@ -27,6 +27,9 @@ font:
     family: Fira Code
     style: Italic
    
+# THEME theme
+# CUSTOM custom
+
 # Colors (Gruvbox dark)
 colors:
   # Default colors
@@ -57,3 +60,78 @@ colors:
     magenta: '0xd3869b'
     cyan:    '0x8ec07c'
     white:   '0xebdbb2'
+
+    ## # OCEAN
+    ## colors:
+    ##     primary:
+    ##         background: '#0F111A'
+    ##         foreground: '#8F93A2'
+    ##     normal:
+    ##         black: '#0F111A'
+    ##         red: '#FF5370'
+    ##         green: '#99C794'
+    ##         yellow: '#C4E88D'
+    ##         blue: '#82AAFF'
+    ##         magenta: '#C792EA'
+    ##         cyan: '#89DDFF'
+    ##         white: '#464B5D'
+    ##     bright:
+    ##         black: '#0F111A'
+    ##         red: '#FF5370'
+    ##         green: '#99C794'
+    ##         yellow: '#C4E88D'
+    ##         blue: '#82AAFF'
+    ##         magenta: '#C792EA'
+    ##         cyan: '#89DDFF'
+    ##         white: '#8F93A2'
+## # Colors (One Dark)
+## colors:
+##   primary:
+##     background: '#282c34'
+##     foreground: '#abb2bf'
+##   cursor:
+##     text:       CellBackground
+##     cursor:     '#528bff' # syntax-cursor-color
+##   selection:
+##     text:       CellForeground
+##     background: '#3e4451' # syntax-selection-color
+##   normal:
+##     black:      '#5c6370' # mono-3
+##     red:        '#e06c75' # red 1
+##     green:      '#98c379'
+##     yellow:     '#e5c07b' # orange 2
+##     blue:       '#61afef'
+##     magenta:    '#c678dd'
+##     cyan:       '#56b6c2'
+##     white:      '#828997' # mono-2
+
+## # Colors (Gruvbox dark)
+## colors:
+##   # Default colors
+##   primary:
+##     # hard contrast: background = '0x1d2021'
+##     background: '0x282828'
+##     # soft contrast: background = '0x32302f'
+##     foreground: '0xebdbb2'
+## 
+##   # Normal colors
+##   normal:
+##     black:   '0x282828'
+##     red:     '0xcc241d'
+##     green:   '0x98971a'
+##     yellow:  '0xd79921'
+##     blue:    '0x458588'
+##     magenta: '0xb16286'
+##     cyan:    '0x689d6a'
+##     white:   '0xa89984'
+## 
+##   # Bright colors
+##   bright:
+##     black:   '0x928374'
+##     red:     '0xfb4934'
+##     green:   '0xb8bb26'
+##     yellow:  '0xfabd2f'
+##     blue:    '0x83a598'
+##     magenta: '0xd3869b'
+##     cyan:    '0x8ec07c'
+##     white:   '0xebdbb2'
