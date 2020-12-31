@@ -14,6 +14,8 @@ function backup {
 
     mkdir -p $BACKUP/alacritty/
     cp ~/.config/alacritty/*.yml $BACKUP/alacritty/
+
+    cp -r ~/.config/rofi/ $BACKUP
 }
 
 # -- Update the repo with the system's dotfiles
@@ -23,6 +25,8 @@ function update {
 
     cp ~/.config/awesome/rc.lua  ~/dotfiles/config/awesome/
     cp ~/.config/alacritty/*.yml ~/dotfiles/config/alacritty/
+
+    cp -r ~/.config/rofi/ ~/dotfiles/config/
 }
 
 backup
