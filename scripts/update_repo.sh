@@ -16,6 +16,8 @@ function backup {
     cp ~/.config/alacritty/*.yml $BACKUP/alacritty/
 
     cp -r ~/.config/rofi/ $BACKUP
+
+    cp ~/.xprofile $BACKUP
 }
 
 # -- Update the repo with the system's dotfiles
@@ -27,6 +29,8 @@ function update {
     cp ~/.config/alacritty/*.yml ~/dotfiles/config/alacritty/
 
     cp -r ~/.config/rofi/ ~/dotfiles/config/
+
+    cp ~/.xprofile ~/.dotfiles
 }
 
 backup
