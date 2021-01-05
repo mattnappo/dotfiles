@@ -1,3 +1,4 @@
 xinput --set-prop 'pointer:Razer Razer DeathAdder Chroma' 'libinput Accel Speed' -0.99
 wait 2
 dwmblocks &
+nitrogen --restore
