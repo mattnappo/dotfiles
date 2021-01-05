@@ -1,11 +1,4 @@
 # dotfiles
 My dotfiles.
 
-![Rice](rice.png)
-![Rice2](rice2.png)
-
-## Fonts
- * Main font: Fira Code
- * SF Mono Medium
- * Roboto Mono Medium
- * Source Code Pro
+See my builds of dwm, dwmblocks, and dmenu at [this repo](https://github.com/xoreo/sl)
