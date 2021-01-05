@@ -2,3 +2,4 @@ xinput --set-prop 'pointer:Razer Razer DeathAdder Chroma' 'libinput Accel Speed'
 wait 2
 dwmblocks &
 nitrogen --restore
+pulseaudio -D
