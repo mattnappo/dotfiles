@@ -1,0 +1,6 @@
+xinput set-prop 11 "libinput Natural Scrolling Enabled" 1
+xinput set-prop 11 "libinput Disable While Typing Enabled" 0
+wait 1
+dwmblocks &
+nitrogen --restore
+pulseaudio -D

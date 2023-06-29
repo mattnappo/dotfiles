@@ -1,0 +1,7 @@
+#!/bin/bash
+
+brightness="$(xbacklight -get | cut -c1-3)"
+backlight="$(cat /sys/class/leds/tpacpi::kbd_backlight/brightness)"
+
+echo -e "$brightness scn \n$backlight kbd" | dmenu 
+
