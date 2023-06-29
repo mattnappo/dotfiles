@@ -1,20 +1,24 @@
 " curl -fLo ~/.vim/autoload/plug.vim --create-dir https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
 
 syntax on
+syntax enable
 set tabstop=4
 set expandtab
 set shiftwidth=4
 set backspace=indent,eol,start
 set noautoindent
 set formatoptions+=r
-set number
 set hlsearch
 set incsearch
 set ruler
 set encoding=utf-8
 set virtualedit=block
+set number
 set relativenumber
 set ttimeoutlen=10 " Fix slow O
+set mouse=a
+filetype plugin indent on
+"set colorcolumn=80
 
 " Switch to left pane map <C-t><down> :td<cr> " Bind ctrl-n to toggle NERDTree
 map <C-n> :NERDTreeToggle<cr>
@@ -32,6 +36,9 @@ map <C-l> lzz
 
 map j gj
 map k gk
+
+" Remove highlighting shortcut
+map <C-a> :noh<CR>
 
 " map <C-c> :!sh -xc '/home/matt/git/md/Notes/compile_tex.sh'
 
@@ -55,6 +62,8 @@ Plug 'rakr/vim-one'
 Plug 'arcticicestudio/nord-vim'
 Plug 'morhetz/gruvbox'
 Plug 'kaicataldo/material.vim', { 'branch': 'main' } 
+Plug 'romgrk/doom-one.vim'
+Plug 'sainnhe/gruvbox-material'
 
 " Status lines
 Plug 'itchyny/lightline.vim'
@@ -72,15 +81,19 @@ Plug 'elixir-editors/vim-elixir'
 Plug 'justinmk/vim-syntax-extra'
 Plug 'vim-python/python-syntax'
 Plug 'bfrg/vim-cpp-modern'
+Plug 'JuliaEditorSupport/julia-vim'
 
 " Other
 Plug 'preservim/nerdtree'
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
-Plug 'jiangmiao/auto-pairs'
+"Plug 'jiangmiao/auto-pairs'
 Plug 'junegunn/fzf' 
 Plug 'junegunn/fzf.vim'
 
 call plug#end()
+
+" Set up tags
+set tags=./tags,tags;
 
 " Autosave for go and rust
 let g:rustfmt_autosave = 1
@@ -126,10 +139,14 @@ set t_Co=256
 let g:rehash256 = 1
 set background=dark
 
+" tmux Italics
+set t_ZH=[3m
+set t_ZR=[23m
+
 let g:material_terminal_italics = 1
 let g:material_theme_style = 'ocean'
-colorscheme material
-colorscheme gruvbox
+"colorscheme material
+colorscheme gruvbox-material
 
 " Colorscheme
 " colorscheme onedark
