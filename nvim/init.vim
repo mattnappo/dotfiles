@@ -1,7 +1,6 @@
-" curl -fLo ~/.vim/autoload/plug.vim --create-dir https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
-
 syntax on
 syntax enable
+
 set tabstop=4
 set expandtab
 set shiftwidth=4
@@ -15,12 +14,10 @@ set encoding=utf-8
 set virtualedit=block
 set number
 set relativenumber
-set ttimeoutlen=10 " Fix slow O
+set ttimeoutlen=10
 set mouse=a
-set modeline
-set ls=2
 filetype plugin indent on
-"set colorcolumn=80
+set colorcolumn=
 
 " Switch to left pane map <C-t><down> :td<cr> " Bind ctrl-n to toggle NERDTree
 map <C-n> :NERDTreeToggle<cr>
@@ -28,25 +25,11 @@ map <C-n> :NERDTreeToggle<cr>
 " Fzf search for file
 map <C-p> :FzfFiles<CR>
 
-map <C-s> :!zsh<CR>
-
+" better pane movement
 map <C-h> hzz
 map <C-j> jzz
 map <C-k> kzz
 map <C-l> lzz
-
-map <C-w>m :MaximizerToggle<cr>
-
-map j gj
-map k gk
-
-" Remove highlighting shortcut
-map <C-a> :NERDTreeRefresh<CR>\|:source ~/.config/nvim/init.vim<CR>\|:noh<CR>
-map <C-b><C-x> :!cargo test<CR>
-map <C-b><C-b> :!cargo run<CR>
-map <C-b>:!cargo fmt<CR>
-
-" Better pane toggling
 nnoremap <C-H> <C-W><C-H>
 nnoremap <C-J> <C-W><C-j>
 nnoremap <C-K> <C-W><C-k>
@@ -55,108 +38,108 @@ nnoremap <C-L> <C-W><C-l>
 set splitright
 set splitbelow
 
+" logical line moving
+map j gj
+map k gk
+
+map <C-w>m :MaximizerToggle<cr>
+
+" Remove highlighting shortcut
+map <C-a> :NERDTreeRefresh<CR>\|:noh<CR>
+
 call plug#begin('~/.vim/plugged')
 " Themes
-Plug 'arzg/vim-colors-xcode'
-Plug 'arcticicestudio/nord-vim'
-Plug 'dracula/vim'
-Plug 'ntk148v/vim-horizon'
-Plug 'joshdick/onedark.vim'
-Plug 'rakr/vim-one'
-Plug 'arcticicestudio/nord-vim'
-Plug 'morhetz/gruvbox'
-Plug 'kaicataldo/material.vim', { 'branch': 'main' } 
-Plug 'romgrk/doom-one.vim'
+Plug 'Mofiqul/vscode.nvim'
 Plug 'sainnhe/gruvbox-material'
-Plug 'tanvirtin/monokai.nvim'
 
 " Language support
-Plug 'pangloss/vim-javascript'
 Plug 'rhysd/vim-llvm'
 Plug 'rust-lang/rust.vim'
-"Plug 'fatih/vim-go', { 'do': ':GoUpdateBinaries' }
-Plug 'ron-rs/ron.vim'
-Plug 'tbastos/vim-lua'
-Plug 'elixir-editors/vim-elixir'
-Plug 'justinmk/vim-syntax-extra'
-Plug 'vim-python/python-syntax'
-Plug 'bfrg/vim-cpp-modern'
-Plug 'JuliaEditorSupport/julia-vim'
-Plug 'cstrahan/vim-capnp'
 
 " Other
 Plug 'preservim/nerdtree'
-Plug 'neoclide/coc.nvim', {'branch': 'release'}
-"Plug 'jiangmiao/auto-pairs'
+Plug 'dense-analysis/ale'
 Plug 'junegunn/fzf' 
 Plug 'junegunn/fzf.vim'
 Plug 'szw/vim-maximizer'
-Plug 'voldikss/vim-floaterm'
+Plug 'preservim/nerdcommenter'
+Plug 'ojroques/vim-oscyank', {'branch': 'main'}
 
 call plug#end()
 
-" Set up tags
-set tags=./tags,tags;
-
 " Autosave for go and rust
 let g:rustfmt_autosave = 1
-let g:go_fmt_autosave = 1
+let g:ale_linters = {'rust': ['analyzer'], 'go': ['gopls']}
+
+" Enable fixing files on save
+" ale_fix_on_save only controls *when* fixers run; g:ale_fixers lists *what*
+" runs. Linters never modify the buffer, so Go needs a fixer listed here.
+" goimports is gofmt plus import-block maintenance.
+let g:ale_fix_on_save = 1
+let g:ale_fixers = {'go': ['goimports']}
 
 " fzf config
 let g:fzf_command_prefix = 'Fzf'
 let g:fzf_layout=  { 'down': '~20%' }
 
-" Configure airline
-" let g:airline_powerline_fonts = 1
-" let g:airline_theme='bubblegum'
+" ALE config
+set completeopt=menu,menuone,preview,noselect,noinsert
+let g:ale_completion_enabled = 1
 
-" Configure status bar
-" set laststatus=2
-" set noshowmode
-" let g:lightline = { 'colorscheme': 'seoul256' }
-" let g:lightline = { 'colorscheme': 'wombat' }
+" Configure fzf to respect .gitignore
+" Uses fd if available, falls back to git ls-files, then find
+if executable('rg')
+  let $FZF_DEFAULT_COMMAND = 'rg --files'
+else
+  let $FZF_DEFAULT_COMMAND = 'git ls-files --cached --exclude-standard 2>/dev/null || find . -type f'
+endif
 
-" Configure coc
-let g:coc_disable_startup_warning = 1
-function! s:check_back_space() abort
-  let col = col('.') - 1
-  return !col || getline('.')[col - 1]  =~ '\s'
-endfunction
-inoremap <silent><expr> <Tab>
-      \ pumvisible() ? "\<C-n>" :
-      \ <SID>check_back_space() ? "\<Tab>" :
-      \ coc#refresh()
-inoremap <expr> <Tab> pumvisible() ? "\<C-n>" : "\<Tab>"
-inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
-inoremap <expr> <cr> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
+" ripgrep integration without buffer jumps or output noise
+if executable("rg")
+  set grepprg=rg\ --vimgrep\ --smart-case\ --hidden
+  set grepformat=%f:%l:%c:%m
+endif
 
-inoremap <silent><expr> <tab> coc#pum#visible() ? coc#pum#confirm() : "\<tab>"
-inoremap <silent><expr> <cr> coc#pum#visible() ? coc#pum#confirm() : "\<cr>"
+" No output, no cursor jumps; accept spaces without quoting
+command! -nargs=+ Grep silent! keepjumps grep <q-args>
+
+" open quickfix as a vertical split on the left, only if results exist
+" autocmd QuickFixCmdPost grep topleft vert cwindow 40 " doesn't work yet
+
+" keybinding (Ctrl+F) to invoke grep
+nnoremap <C-f> :Grep 
+
+autocmd TextYankPost * if v:event.operator is 'y' && v:event.regname is '' | execute 'OSCYankRegister "' | endif
+
+" Create default mappings
+let g:NERDCreateDefaultMappings = 1
+" Add spaces after comment delimiters by default
+let g:NERDSpaceDelims = 1
+" Use compact syntax for prettified multi-line comments
+let g:NERDCompactSexyComs = 1
+let NERDTreeShowHidden = 1
+let g:NERDTreeHijackNetrw = 0
 
 " Fix NERDTree annoyances
 autocmd StdinReadPre * let s:std_in=1
-autocmd VimEnter * if argc() == 0 && !exists('s:std_in') | NERDTree | endif
+"autocmd VimEnter * if argc() == 0 && !exists('s:std_in') | NERDTree | endif
 
-" Fix colors
-set termguicolors
-let &t_8f = "\<Esc>[38;2;%lu;%lu;%lum"
-let &t_8b = "\<Esc>[48;2;%lu;%lu;%lum"
-set t_Co=256
-let g:rehash256 = 1
-set background=dark
 
-" tmux Italics
-set t_ZH=[3m
-set t_ZR=[23m
+function! ToggleMinimalMode()
+  if &number || &relativenumber || &mouse != ""
+    set nonumber norelativenumber mouse=
+    :ALEDisable
+    echo "copy mode: OFF"
+  else
+    set number relativenumber mouse=a
+    :ALEEnable
+    echo "copy mode: ON"
+  endif
+endfunction
 
-let g:material_terminal_italics = 1
-let g:material_theme_style = 'ocean'
-"colorscheme material
-colorscheme gruvbox-material
+nnoremap <leader>z :call ToggleMinimalMode()<CR>
 
-" colorscheme monokai
-" colorscheme onedark
-" colorscheme dracula
-" colorscheme horizon
-" colorscheme gruvbox
+
+" colorscheme gruvbox-material
+" colorscheme vim
 
